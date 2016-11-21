@@ -1,7 +1,7 @@
 import unittest
 from dateinfer.date_elements import *
-import infer
-import ruleproc
+from dateinfer.infer import infer, _mode, _most_restrictive, _tag_most_likely, _percent_match, _tokenize_by_character_class
+import dateinfer.ruleproc as ruleproc
 import yaml
 
 
@@ -32,7 +32,7 @@ def test_case_for_example(test_data):
             self.assertTrue(hasattr(self, 'test_data'), 'testdata field not set on test object')
 
             expected = self.test_data['format']
-            actual = infer.infer(self.test_data['examples'])
+            actual = infer(self.test_data['examples'])
 
             self.assertEqual(expected,
                              actual,
@@ -48,24 +48,24 @@ class TestAmbiguousDateCases(unittest.TestCase):
     TestCase for tests which results are ambiguous but can be assumed to fall in a small set of possibilities.
     """
     def testAmbg1(self):
-        self.assertIn(infer.infer(['1/1/2012']), ['%m/%d/%Y', '%d/%m/%Y'])
+        self.assertIn(infer(['1/1/2012']), ['%m/%d/%Y', '%d/%m/%Y'])
 
     def testAmbg2(self):
         # Note: as described in Issue #5 (https://github.com/jeffreystarr/dateinfer/issues/5), the result
         # should be %d/%m/%Y as the more likely choice. However, at this point, we will allow %m/%d/%Y.
-        self.assertIn(infer.infer(['04/12/2012', '05/12/2012', '06/12/2012', '07/12/2012']),
+        self.assertIn(infer(['04/12/2012', '05/12/2012', '06/12/2012', '07/12/2012']),
                       ['%d/%m/%Y', '%m/%d/%Y'])
 
 
 class TestMode(unittest.TestCase):
     def testMode(self):
-        self.assertEqual(5, infer._mode([1, 3, 4, 5, 6, 5, 2, 5, 3]))
-        self.assertEqual(2, infer._mode([1, 2, 2, 3, 3]))  # with ties, pick least value
+        self.assertEqual(5, _mode([1, 3, 4, 5, 6, 5, 2, 5, 3]))
+        self.assertEqual(2, _mode([1, 2, 2, 3, 3]))  # with ties, pick least value
 
 
 class TestMostRestrictive(unittest.TestCase):
     def testMostRestrictive(self):
-        t = infer._most_restrictive
+        t = _most_restrictive
 
         self.assertEqual(MonthNum(), t([DayOfMonth(), MonthNum, Year4()]))
         self.assertEqual(Year2(), t([Year4(), Year2()]))
@@ -73,7 +73,7 @@ class TestMostRestrictive(unittest.TestCase):
 
 class TestPercentMatch(unittest.TestCase):
     def testPercentMatch(self):
-        t = infer._percent_match
+        t = _percent_match
         patterns = (DayOfMonth, MonthNum, Filler)
         examples = ['1', '2', '24', 'b', 'c']
 
@@ -126,7 +126,7 @@ class TestRuleElements(unittest.TestCase):
 class TestTagMostLikely(unittest.TestCase):
     def testTagMostLikely(self):
         examples = ['8/12/2004', '8/14/2004', '8/16/2004', '8/25/2004']
-        t = infer._tag_most_likely
+        t = _tag_most_likely
 
         actual = t(examples)
         expected = [MonthNum(), Filler('/'), DayOfMonth(), Filler('/'), Year4()]
@@ -136,7 +136,7 @@ class TestTagMostLikely(unittest.TestCase):
 
 class TestTokenizeByCharacterClass(unittest.TestCase):
     def testTokenize(self):
-        t = infer._tokenize_by_character_class
+        t = _tokenize_by_character_class
 
         self.assertListEqual([], t(''))
         self.assertListEqual(['2013', '-', '08', '-', '14'], t('2013-08-14'))
