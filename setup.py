@@ -1,12 +1,12 @@
 from distutils.core import setup
 
-setup(name='dateinfer',
-      version='0.2.1',
+setup(name='pydateinfer',
+      version='0.3.0',
       description='Infers date format from examples',
       long_description="""Uses a series of pattern matching and rewriting rules to compute a "best guess" datetime.strptime format string give a list of example date strings.""",
       author='Jeffrey Starr',
-      author_email='jeffrey.starr@ztoztechnologies.com',
-      url='https://github.com/jeffreystarr/dateinfer',
+      author_email='will@pedalwrencher.com',
+      url='https://github.com/wdm0006/dateinfer',
       packages=['dateinfer'],
       classifiers=[
           'Development Status :: 4 - Beta',

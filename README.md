@@ -1,7 +1,10 @@
-dateinfer
-=========
+pydateinfer
+===========
 
-Python library to infer date format from examples
+Python library to infer date format from examples.  This is an actively
+ maintained fork of the original [dateinfer](https://github.com/jeffreystarr/dateinfer)
+ library by Jeffery Starr.  It maintains python 2/3 compatibility and 
+ will be released as pydateinfer.  Pull requests and issues welcome.
 
 Table of Contents
 -----------------
@@ -24,10 +27,11 @@ the file.
 <a name="installation"></a>Installation
 ---------------------------------------
 
-The simplest way to install the library is:
+The simplest way to install the library will be once we get the first 
+release cut:
 
 ````
-$ pip install dateinfer
+$ pip install pydateinfer
 ````
 
 <a name="usage"></a>Usage
