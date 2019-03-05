@@ -117,3 +117,10 @@ format: "%d-%m-%Y"
 examples:
   - !!str 20-08-2016
 ...
+---
+name: Day and Month
+format: "%d %B"
+examples:
+  - 10 November
+  - 23 March
+...
