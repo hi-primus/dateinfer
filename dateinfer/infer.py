@@ -55,6 +55,8 @@ RULES = [
        SwapSequence([MonthNum, F(':'), '.'], [Hour12, F(':'), Minute])),
     If(Sequence(Hour24, F(':'), '\d', '\D'),
        SwapSequence([Hour24, F(':'), '\d'], [Hour24, F(':'), Minute])),
+    If(Sequence(MonthNum, F(':'), '\d'),
+       SwapSequence([MonthNum, F(':'), '.'], [Hour24, F(':'), Minute])),
     If(And(
         Sequence(Hour12, F(':'), Minute),
         Contains(Hour24)),

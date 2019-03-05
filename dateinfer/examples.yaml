@@ -154,3 +154,15 @@ format: "%Y"
 examples:
   - !!str 2011
 ...
+---
+name: Weekday, Date, 24-hours clock
+format: "%A %d %B %Y %H:%M"
+examples:
+  - Tuesday 5 March 2019 08:59
+...
+---
+name: Weekday, Date, 12-hour clock
+format: "%A %d %B %Y %I:%M %p"
+examples:
+  - Tuesday 5 March 2019 05:09 PM
+...
