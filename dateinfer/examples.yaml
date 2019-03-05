@@ -124,3 +124,33 @@ examples:
   - 10 November
   - 23 March
 ...
+---
+name: Weekday + Day of Month + Month
+format: "%A %d %B"
+examples:
+  - Friday 10 June
+...
+---
+name: Weekday + Day of Month + Month, preserve formatting
+format: "%A (%d %B)"
+examples:
+  - Friday (10 June)
+...
+---
+name: Weekday + Day of Month + Month abbreviated, preserve formatting
+format: "%A (%d %b)"
+examples:
+  - Friday (10 Nov)
+...
+---
+name: Month and year
+format: "%B %Y"
+examples:
+  - November 2011
+...
+---
+name: Year
+format: "%Y"
+examples:
+  - !!str 2011
+...
