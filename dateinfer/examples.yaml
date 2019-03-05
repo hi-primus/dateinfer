@@ -42,6 +42,8 @@ name: Little Endian
 format: "%d/%m/%Y"
 examples:
   - 13/1/2012
+  - 21/3/2016
+  - 1/2/2012
 ...
 ---
 name: MLA (dd mmm yyyy)
@@ -103,9 +105,15 @@ examples:
   - Tue Jan 21 3:30 PM EST 2014
 ...
 ---
-name: UTC
+name: UTC with TZ offset
 format: "%Y-%m-%dT%H:%M:%S%z"
 examples:
   - 2014-01-11T12:21:05+0000
   - 2015-02-16T16:05:31-0400
+...
+---
+name: Dutch, hyphenated dd-mm-yyyy
+format: "%d-%m-%Y"
+examples:
+  - !!str 20-08-2016
 ...
