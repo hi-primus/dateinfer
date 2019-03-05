@@ -225,17 +225,24 @@ def _tokenize_by_character_class(s):
 
     _tokenize_by_character_class('2013-08-14') => ['2013', '-', '08', '-', '14']
     """
-    character_classes = [string.digits, string.ascii_letters, string.punctuation, string.whitespace]
+    # Callables per character class. Return True/False depending on whether the character is in the
+    # respective class.
+    character_classes = [
+        lambda x: x.isdigit(),
+        lambda x: x.isalpha(),
+        lambda x: x in string.punctuation,
+        lambda x: x.isspace()
+    ]
 
     result = []
     rest = list(s)
     while rest:
         progress = False
-        for character_class in character_classes:
-            if rest[0] in character_class:
+        for part_of_class in character_classes:
+            if part_of_class(rest[0]):
                 progress = True
                 token = ''
-                for take_away in itertools.takewhile(lambda c: c in character_class, rest[:]):
+                for take_away in itertools.takewhile(part_of_class, rest[:]):
                     token += take_away
                     rest.pop(0)
                 result.append(token)
