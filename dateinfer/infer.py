@@ -32,19 +32,14 @@ DATE_ELEMENTS = (AMPM(),
 
 F = Filler  # short-hand to clarify rules
 RULES = [
-    #modified to support mm/dd/yyyy (preference to month over DayofMonth: current pip version gives dd/mm/yyyy
     If(Sequence(MonthNum, F('/'), r'\d', F('/'), Year4),
        SwapSequence([MonthNum, F('/'), r'\d', F('/'), Year4], [MonthNum, F('/'), DayOfMonth, F('/'), Year4])),
-    #modified to support mm/dd/yy (preference to month over DayofMonth: current pip version gives dd/mm/hh issue #10
     If(Sequence(MonthNum, F('/'), r'\d', F('/'), Hour24),
        SwapSequence([MonthNum, F('/'), r'\d', F('/'), Hour24], [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
-   #modified to support mm-dd-yy (preference to month over DayOfMonth: current pip version gives dd-mm-hh (like issue #10)
     If(Sequence(MonthNum, F('-'), r'\d', F('-'), Hour24),
        SwapSequence([MonthNum, F('-'), r'\d', F('-'), Hour24], [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
-   #modified to support mm/dd/yy (preference to month over DayofMonth: current pip version gives dd/mm/mm (12-12-12)
     If(Sequence(MonthNum, F('/'), r'\d', F('/'), MonthNum),
        SwapSequence([MonthNum, F('/'), r'\d', F('/'), MonthNum], [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
-   #modified to support mm-dd-yy (preference to month over DayOfMonth: current pip version gives dd-mm-mm (12-12-12)
     If(Sequence(MonthNum, F('-'), r'\d', F('-'), MonthNum),
        SwapSequence([MonthNum, F('-'), r'\d', F('-'), MonthNum], [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
     If(Sequence(MonthNum, F(':'), r'\d', F(':'), r'\d'),
