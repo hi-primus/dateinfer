@@ -1,15 +1,29 @@
+import locale
+import threading
 import unittest
+from contextlib import contextmanager
 from os.path import dirname, join
 
-import yaml
-
 import dateinfer.ruleproc as ruleproc
+import yaml
 from dateinfer.date_elements import (DayOfMonth, Filler, Hour12, Hour24,
                                      Minute, MonthNum, MonthTextShort, Second,
                                      Timezone, WeekdayShort, Year2, Year4)
 from dateinfer.infer import (_mode, _most_restrictive, _percent_match,
                              _tag_most_likely, _tokenize_by_character_class,
                              infer)
+
+LOCALE_LOCK = threading.Lock()
+
+
+@contextmanager
+def setlocale(name):
+    with LOCALE_LOCK:
+        saved = locale.setlocale(locale.LC_ALL)
+        try:
+            yield locale.setlocale(locale.LC_ALL, name)
+        finally:
+            locale.setlocale(locale.LC_ALL, saved)
 
 
 def load_tests(loader, standard_tests, ignored):
@@ -39,7 +53,10 @@ def test_case_for_example(test_data):
             self.assertTrue(hasattr(self, 'test_data'), 'testdata field not set on test object')
 
             expected = self.test_data['format']
-            actual = infer(self.test_data['examples'])
+            testcase_locale = self.test_data.get('locale', 'en_US')
+
+            with setlocale(testcase_locale):
+                actual = infer(self.test_data['examples'])
 
             error_fmt = '{0}: Inferred `{1}`!=`{2}`'
 

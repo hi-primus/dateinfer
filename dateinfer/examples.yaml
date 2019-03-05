@@ -2,6 +2,7 @@
 # This document is formatted in YAML (http://yaml.org/ version 1.1).
 # Note that yaml will convert ISO dates into datetime objects. Use !!str to keep examples as strings.
 # Note: Names for formats are not meant to imply the format originated or is solely used with that name
+# It is possible to specify the locale of the examples per test case (e.g., locale: de_DE)
 ---
 name: ISO 8601 (date only)
 format: "%Y-%m-%d"
@@ -165,4 +166,11 @@ name: Weekday, Date, 12-hour clock
 format: "%A %d %B %Y %I:%M %p"
 examples:
   - Tuesday 5 March 2019 05:09 PM
+...
+---
+name: Weekday, Date, 12-hour clock
+format: "%A %d %B %Y %I:%M %p"
+locale: de_DE
+examples:
+  - Dienstag 5 März 2019 05:09 PM
 ...
