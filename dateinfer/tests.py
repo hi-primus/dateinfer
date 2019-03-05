@@ -1,4 +1,5 @@
 import unittest
+from os.path import dirname, join
 
 import yaml
 
@@ -18,7 +19,7 @@ def load_tests(loader, standard_tests, ignored):
     suite = unittest.TestSuite()
     suite.addTests(standard_tests)
 
-    with open('examples.yaml', 'r') as f:
+    with open(join(dirname(__file__), 'examples.yaml'), 'r') as f:
         examples = yaml.safe_load_all(f)
         for example in examples:
             suite.addTest(test_case_for_example(example))
