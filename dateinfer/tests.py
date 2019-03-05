@@ -53,7 +53,7 @@ def test_case_for_example(test_data):
             self.assertTrue(hasattr(self, 'test_data'), 'testdata field not set on test object')
 
             expected = self.test_data['format']
-            testcase_locale = self.test_data.get('locale', 'en_US')
+            testcase_locale = self.test_data.get('locale', 'en_US.UTF-8')
 
             with setlocale(testcase_locale):
                 actual = infer(self.test_data['examples'])

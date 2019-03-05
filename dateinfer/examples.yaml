@@ -170,7 +170,7 @@ examples:
 ---
 name: Weekday, Date, 12-hour clock
 format: "%A %d %B %Y %I:%M %p"
-locale: de_DE
+locale: de_DE.UTF-8
 examples:
   - Dienstag 5 März 2019 05:09 PM
 ...
