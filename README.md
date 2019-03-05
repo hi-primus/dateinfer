@@ -1,6 +1,8 @@
 pydateinfer
 ===========
 
+[![Build Status](https://semaphoreci.com/api/v1/nedap-healthcare/dateinfer/branches/master/shields_badge.svg)](https://semaphoreci.com/nedap-healthcare/dateinfer)
+
 Python library to infer date format from examples.  This is an actively
  maintained fork of the original [dateinfer](https://github.com/jeffreystarr/dateinfer)
  library by Jeffery Starr.  It maintains python 2/3 compatibility and
