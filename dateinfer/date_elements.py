@@ -1,12 +1,12 @@
 import calendar
-import pytz
 import re
 
+import pytz
 
 __author__ = 'jeffrey.starr@ztoztechnologies.com'
 
 
-class DateElement(object):
+class DateElement:
     """
     Abstract class for a date element, a portion of a valid date/time string
 
@@ -73,14 +73,15 @@ class DayOfMonth(DateElement):
 
 class Filler(DateElement):
     """
-    A special date class, filler matches everything. Filler is usually used for matches of whitespace
-    and punctuation.
+    A special date class, filler matches everything. Filler is usually used for matches of
+    whitespace and punctuation.
     """
+
     def __init__(self, filler):
         self.directive = filler.replace('%', '%%')  # escape %
 
     @staticmethod
-    def is_match(token):
+    def is_match(_):
         return True
 
     @staticmethod
@@ -231,8 +232,8 @@ class UTCOffset(DateElement):
         # technically offset_re should be:
         # ^[-\+]\d\d:?(\d\d)?$
         # but python apparently only uses the +/-hhmm format
-        # A rule will catch the preceding + and - and combine the two entries since punctuation and numbers
-        # are separated by the tokenizer.
+        # A rule will catch the preceding + and - and combine the two entries since punctuation and
+        # numbers are separated by the tokenizer.
         offset_re = r'^\d\d\d\d$'
         return re.match(offset_re, token)
 
@@ -299,7 +300,7 @@ class Year4(DateElement):
         if len(token) != 4:
             return False
         try:
-            year = int(token)
+            _ = int(token)
             return True
         except ValueError:
             return False
