@@ -33,29 +33,29 @@ DATE_ELEMENTS = (AMPM(),
 F = Filler  # short-hand to clarify rules
 RULES = [
     #modified to support mm/dd/yyyy (preference to month over DayofMonth: current pip version gives dd/mm/yyyy
-    If(Sequence(MonthNum, F('/'), '\d', F('/'), Year4),
-       SwapSequence([MonthNum, F('/'), '\d', F('/'), Year4], [MonthNum, F('/'), DayOfMonth, F('/'), Year4])),
+    If(Sequence(MonthNum, F('/'), r'\d', F('/'), Year4),
+       SwapSequence([MonthNum, F('/'), r'\d', F('/'), Year4], [MonthNum, F('/'), DayOfMonth, F('/'), Year4])),
     #modified to support mm/dd/yy (preference to month over DayofMonth: current pip version gives dd/mm/hh issue #10
-    If(Sequence(MonthNum, F('/'), '\d', F('/'), Hour24),
-       SwapSequence([MonthNum, F('/'), '\d', F('/'), Hour24], [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
+    If(Sequence(MonthNum, F('/'), r'\d', F('/'), Hour24),
+       SwapSequence([MonthNum, F('/'), r'\d', F('/'), Hour24], [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
    #modified to support mm-dd-yy (preference to month over DayOfMonth: current pip version gives dd-mm-hh (like issue #10)
-    If(Sequence(MonthNum, F('-'), '\d', F('-'), Hour24),
-       SwapSequence([MonthNum, F('-'), '\d', F('-'), Hour24], [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
+    If(Sequence(MonthNum, F('-'), r'\d', F('-'), Hour24),
+       SwapSequence([MonthNum, F('-'), r'\d', F('-'), Hour24], [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
    #modified to support mm/dd/yy (preference to month over DayofMonth: current pip version gives dd/mm/mm (12-12-12)
-    If(Sequence(MonthNum, F('/'), '\d', F('/'), MonthNum),
-       SwapSequence([MonthNum, F('/'), '\d', F('/'), MonthNum], [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
+    If(Sequence(MonthNum, F('/'), r'\d', F('/'), MonthNum),
+       SwapSequence([MonthNum, F('/'), r'\d', F('/'), MonthNum], [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
    #modified to support mm-dd-yy (preference to month over DayOfMonth: current pip version gives dd-mm-mm (12-12-12)
-    If(Sequence(MonthNum, F('-'), '\d', F('-'), MonthNum),
-       SwapSequence([MonthNum, F('-'), '\d', F('-'), MonthNum], [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
-    If(Sequence(MonthNum, F(':'), '\d', F(':'), '\d'),
-       SwapSequence([MonthNum, F(':'), '\d', F(':'), '\d'], [Hour12, F(':'), Minute, F(':'), Second])),
-    If(Sequence(Hour24, F(':'), '\d', F(':'), '\d'),
-       SwapSequence([Hour24, F(':'), '\d', F(':'), '\d'], [Hour24, F(':'), Minute, F(':'), Second])),
-    If(Sequence(MonthNum, F(':'), '\d', '\D'),
+    If(Sequence(MonthNum, F('-'), r'\d', F('-'), MonthNum),
+       SwapSequence([MonthNum, F('-'), r'\d', F('-'), MonthNum], [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
+    If(Sequence(MonthNum, F(':'), r'\d', F(':'), r'\d'),
+       SwapSequence([MonthNum, F(':'), r'\d', F(':'), r'\d'], [Hour12, F(':'), Minute, F(':'), Second])),
+    If(Sequence(Hour24, F(':'), r'\d', F(':'), r'\d'),
+       SwapSequence([Hour24, F(':'), r'\d', F(':'), r'\d'], [Hour24, F(':'), Minute, F(':'), Second])),
+    If(Sequence(MonthNum, F(':'), r'\d', r'\D'),
        SwapSequence([MonthNum, F(':'), '.'], [Hour12, F(':'), Minute])),
-    If(Sequence(Hour24, F(':'), '\d', '\D'),
-       SwapSequence([Hour24, F(':'), '\d'], [Hour24, F(':'), Minute])),
-    If(Sequence(MonthNum, F(':'), '\d'),
+    If(Sequence(Hour24, F(':'), r'\d', r'\D'),
+       SwapSequence([Hour24, F(':'), r'\d'], [Hour24, F(':'), Minute])),
+    If(Sequence(MonthNum, F(':'), r'\d'),
        SwapSequence([MonthNum, F(':'), '.'], [Hour24, F(':'), Minute])),
     If(And(
         Sequence(Hour12, F(':'), Minute),
@@ -82,7 +82,7 @@ RULES = [
     If(Sequence(F('+'), Year4), SwapSequence([F('+'), Year4], [UTCOffset, None])),
     If(Sequence(Second, F('-'), Year4), SwapSequence([Second, F('-'), Year4], [Second, UTCOffset, None])),
     If(Sequence(Minute, F('-'), Year4), SwapSequence([Minute, F('-'), Year4], [Minute, UTCOffset, None])),
-    If(Sequence(Hour24, '.', '\D'), SwapSequence([Hour24, '.', '\D'], [DayOfMonth, KeepOriginal, KeepOriginal])),
+    If(Sequence(Hour24, '.', r'\D'), SwapSequence([Hour24, '.', r'\D'], [DayOfMonth, KeepOriginal, KeepOriginal])),
 ]
 
 
