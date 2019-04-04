@@ -97,6 +97,9 @@ RULES = [
        SwapSequence([Minute, F('-'), Year4], [Minute, UTCOffset, None])),
     If(Sequence(Hour24, '.', r'\D'),
        SwapSequence([Hour24, '.', r'\D'], [DayOfMonth, KeepOriginal, KeepOriginal])),
+    If(Sequence(DayOfMonth, '.', MonthNum, '.', DayOfMonth),
+       SwapSequence([DayOfMonth, '.', MonthNum, '.', DayOfMonth],
+                    [DayOfMonth, KeepOriginal, MonthNum, KeepOriginal, Year2])),
 ]
 
 

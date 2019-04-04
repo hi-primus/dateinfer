@@ -39,6 +39,12 @@ examples:
   - 6/3/85
 ...
 ---
+name: US Traditional, Short ambiguous (MM/DD/YY)
+format: "%d/%m/%y"
+examples:
+  - 22/05/13
+...
+---
 name: Little Endian
 format: "%d/%m/%Y"
 examples:
