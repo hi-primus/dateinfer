@@ -1,0 +1,21 @@
+version: v1.0
+name: dateinfer CI pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+  containers:
+    - name: main
+      image: 'semaphoreci/python:3.7.4'
+blocks:
+  - name: Unit tests
+    task:
+      prologue:
+        commands:
+          - checkout
+          - sudo apt-get install -y locales locales-all
+          - pip install -e . -r requirements.txt
+      jobs:
+        - name: Unit tests
+          commands:
+            - python -m unittest dateinfer/tests.py
