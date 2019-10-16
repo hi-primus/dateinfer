@@ -100,6 +100,10 @@ RULES = [
     If(Sequence(DayOfMonth, '.', MonthNum, '.', DayOfMonth),
        SwapSequence([DayOfMonth, '.', MonthNum, '.', DayOfMonth],
                     [DayOfMonth, KeepOriginal, MonthNum, KeepOriginal, Year2])),
+    If(And(
+        Duplicate(Minute),
+        Contains(Hour24)),
+       SwapDuplicateWhereSequenceNot(Minute, Second, [Minute]))
 ]
 
 
