@@ -103,7 +103,16 @@ RULES = [
     If(And(
         Duplicate(Minute),
         Contains(Hour24)),
-       SwapDuplicateWhereSequenceNot(Minute, Second, [Minute]))
+       SwapDuplicateWhereSequenceNot(Minute, Second, [Minute])),
+
+    If(And(
+            Duplicate(DayOfMonth),
+            Contains(MonthNum)),
+            Swap(MonthNum, Year2)),
+    If(
+        Duplicate(DayOfMonth),
+        SwapDuplicateWhereSequenceNot(DayOfMonth, MonthNum, [DayOfMonth])),
+
 ]
 
 
