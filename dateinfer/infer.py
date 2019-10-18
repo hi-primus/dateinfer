@@ -40,6 +40,8 @@ DATE_ELEMENTS = (AMPM(),
 
 F = Filler  # short-hand to clarify rules
 RULES = [
+    If(Sequence(Year4, Year2),
+        SwapSequence([Year4, Year2], [Year4, MonthNum])),
     If(Sequence(MonthNum, F('/'), r'\d', F('/'), Year4),
        SwapSequence([MonthNum, F('/'), r'\d', F('/'), Year4],
                     [MonthNum, F('/'), DayOfMonth, F('/'), Year4])),
