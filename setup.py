@@ -21,8 +21,6 @@ with open("README.md") as readme_file:
 
 requirements = ["wheel", "pytz"]
 
-setup_requirements = ["pytest-runner"]
-
 test_requirements = ["pytest>=3"]
 
 setup(
@@ -38,19 +36,19 @@ setup(
         "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    description="""Infers date format from examples, by using a series of pattern matching and rewriting rules to compute a "best guess" datetime.strptime format string give a list of example date strings.""",
+    description="""Infers date format from examples, by using a series of pattern matching and rewriting rules to compute a 'best guess' datetime.strptime format string give a list of example date strings.""",
     long_description=readme,
     long_description_content_type="text/markdown",
     install_requires=requirements,
     license="Apache Software License 2.0",
     include_package_data=True,
     keywords="pydateinfer",
-    name="pydateinfer",
+    name="py_dateinfer",
     packages=find_packages(include=["pydateinfer", "pydateinfer.*"]),
-    setup_requires=setup_requirements,
+    setup_requires=[],
     test_suite="tests",
     tests_require=test_requirements,
-    url="https://github.com/audreyr/pydateinfer",
+    url="https://github.com/jeffreystarr/dateinfer",
     version=get_version("pydateinfer/__init__.py"),
     zip_safe=False,
 )

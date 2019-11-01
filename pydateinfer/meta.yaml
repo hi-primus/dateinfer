@@ -1,5 +1,5 @@
 {% set name = "py_dateinfer" %}
-{% set version = "0.4.4" %}
+{% set version = "0.4.5" %}
 
 package:
   name: "{{ name|lower }}"
@@ -7,7 +7,7 @@ package:
 
 source:
   url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: "4623953791efeee33c1a21016f985bd3a3ca5807deaaefcb9eca054f7b86c14f"
+  sha256: "0a4df1c80be414a1b7237d7e85b0b11cb315bfa432107dd7bc28765eb4674ea9"
 
 build:
   number: 0
