@@ -1,10 +1,11 @@
-from dateinfer.date_elements import Filler
+from pydateinfer.date_elements import Filler
 
 
 class If(object):
     """
     Top-level rule
     """
+
     def __init__(self, condition, action):
         """
         Initialize the rule with a condition clause and an action clause that will be executed
@@ -51,6 +52,7 @@ class And(ConditionClause):
     """
     Returns true if all conditions are true.
     """
+
     def __init__(self, *clauses):
         self.clauses = clauses
 
@@ -80,6 +82,7 @@ class Duplicate(ConditionClause):
     """
     Returns true if there is more than one instance of elem in elem_list.
     """
+
     def __init__(self, elem):
         self.elem = elem
 
@@ -91,6 +94,7 @@ class KeepOriginal(object):
     """
     In sequences, this stands for 'keep the original value'
     """
+
     pass
 
 
@@ -99,6 +103,7 @@ class Next(ConditionClause):
     Return true if A and B are found next to each other in the elem_list (with zero or more Filler elements
     between them).
     """
+
     def __init__(self, a_elem, b_elem):
         self.a_elem = a_elem
         self.b_elem = b_elem
@@ -116,7 +121,7 @@ class Next(ConditionClause):
             for b_position in b_positions:
                 left = min(a_position, b_position)
                 right = max(a_position, b_position)
-                between = elem_list[left + 1:right - 1]
+                between = elem_list[left + 1 : right - 1]
                 if len(between) == 0 or all([type(e) is Filler] for e in between):
                     return True
         return False
@@ -135,7 +140,9 @@ class Sequence(ConditionClause):
         self.sequence = sequence
 
     def is_true(self, elem_list):
-        seq_pos = 0  # if we find every element in sequence (pos == length(self.sequence), then a match is found
+        seq_pos = (
+            0
+        )  # if we find every element in sequence (pos == length(self.sequence), then a match is found
 
         for elem in elem_list:
             if self.match(elem, self.sequence[seq_pos]):
@@ -152,14 +159,14 @@ class Sequence(ConditionClause):
         Return True if elem (an element of elem_list) matches seq_expr, an element in self.sequence
         """
         if type(seq_expr) is str:  # wild-card
-            if seq_expr == '.':  # match any element
+            if seq_expr == ".":  # match any element
                 return True
-            elif seq_expr == '\d':
+            elif seq_expr == "\d":
                 return elem.is_numerical()
-            elif seq_expr == '\D':
+            elif seq_expr == "\D":
                 return not elem.is_numerical()
             else:  # invalid wild-card specified
-                raise LookupError('{0} is not a valid wild-card'.format(seq_expr))
+                raise LookupError("{0} is not a valid wild-card".format(seq_expr))
         else:  # date element
             return elem == seq_expr
 
@@ -176,7 +183,7 @@ class Sequence(ConditionClause):
                     return index - seq_pos + 1
             else:  # exited sequence
                 seq_pos = 0
-        raise LookupError('Failed to find sequence in elem_list')
+        raise LookupError("Failed to find sequence in elem_list")
 
 
 class Swap(ActionClause):
@@ -199,6 +206,7 @@ class SwapDuplicateWhereSequenceNot(ActionClause):
     """
     Replace remove_me with insert_me in the case where remove_me is not part of the sequence.
     """
+
     def __init__(self, remove_me, insert_me, seq):
         self.remove_me = remove_me
         self.insert_me = insert_me
@@ -208,7 +216,9 @@ class SwapDuplicateWhereSequenceNot(ActionClause):
         copy = elem_list[:]
 
         start_pos = Sequence.find(self.seq, copy)
-        end_pos = start_pos + len(self.seq)  # do not replace within [start_pos, end_pos)
+        end_pos = start_pos + len(
+            self.seq
+        )  # do not replace within [start_pos, end_pos)
 
         for index, elem in enumerate(copy):
             if start_pos <= index < end_pos:  # within sequence
@@ -218,13 +228,18 @@ class SwapDuplicateWhereSequenceNot(ActionClause):
                     copy[index] = self.insert_me
                     return copy
 
-        raise LookupError('Failed to find element {0} to replace with {1} in {2} ignoring {3} between [{4},{5})'.format(self.remove_me, self.insert_me, copy, self.seq, start_pos, end_pos))
+        raise LookupError(
+            "Failed to find element {0} to replace with {1} in {2} ignoring {3} between [{4},{5})".format(
+                self.remove_me, self.insert_me, copy, self.seq, start_pos, end_pos
+            )
+        )
 
 
 class SwapSequence(ActionClause):
     """
     Returns elem_list with sequence replaced with another sequence
     """
+
     def __init__(self, find_seq, swap_seq):
         self.find_seq = find_seq
         self.swap_seq = swap_seq

@@ -7,14 +7,35 @@ import collections
 import itertools
 import string
 
-from dateinfer.date_elements import (AMPM, DayOfMonth, Filler, Hour12, Hour24,
-                                     Minute, MonthNum, MonthTextLong,
-                                     MonthTextShort, Second, Timezone,
-                                     UTCOffset, WeekdayLong, WeekdayShort,
-                                     Year2, Year4)
-from dateinfer.ruleproc import (And, Contains, Duplicate, If, KeepOriginal,
-                                Sequence, Swap, SwapDuplicateWhereSequenceNot,
-                                SwapSequence)
+from pydateinfer.date_elements import (
+    AMPM,
+    DayOfMonth,
+    Filler,
+    Hour12,
+    Hour24,
+    Minute,
+    MonthNum,
+    MonthTextLong,
+    MonthTextShort,
+    Second,
+    Timezone,
+    UTCOffset,
+    WeekdayLong,
+    WeekdayShort,
+    Year2,
+    Year4,
+)
+from pydateinfer.ruleproc import (
+    And,
+    Contains,
+    Duplicate,
+    If,
+    KeepOriginal,
+    Sequence,
+    Swap,
+    SwapDuplicateWhereSequenceNot,
+    SwapSequence,
+)
 
 # DATE_ELEMENTS is an ordered sequence of date elements, excluding the filler. It is ordered
 # in descending "restrictivity".
@@ -22,99 +43,148 @@ from dateinfer.ruleproc import (And, Contains, Duplicate, If, KeepOriginal,
 # range of Jan .. Dec is 12, but the domain is independent of hours 0 .. 23), but overall a lesser
 # value should be preferred over a greater value.
 # The RULES will be applied after the list is generated following these precedence rules.
-DATE_ELEMENTS = (AMPM(),
-                 MonthNum(),
-                 Hour12(),
-                 Hour24(),
-                 DayOfMonth(),
-                 Minute(),
-                 Second(),
-                 Year2(),
-                 Year4(),
-                 UTCOffset(),
-                 MonthTextShort(),
-                 MonthTextLong(),
-                 WeekdayShort(),
-                 WeekdayLong(),
-                 Timezone())
+DATE_ELEMENTS = (
+    AMPM(),
+    MonthNum(),
+    Hour12(),
+    Hour24(),
+    DayOfMonth(),
+    Minute(),
+    Second(),
+    Year2(),
+    Year4(),
+    UTCOffset(),
+    MonthTextShort(),
+    MonthTextLong(),
+    WeekdayShort(),
+    WeekdayLong(),
+    Timezone(),
+)
 
 F = Filler  # short-hand to clarify rules
 RULES = [
-    If(Sequence(Year4, Year2),
-        SwapSequence([Year4, Year2], [Year4, MonthNum])),
-    If(Sequence(MonthNum, F('/'), r'\d', F('/'), Year4),
-       SwapSequence([MonthNum, F('/'), r'\d', F('/'), Year4],
-                    [MonthNum, F('/'), DayOfMonth, F('/'), Year4])),
-    If(Sequence(MonthNum, F('/'), r'\d', F('/'), Hour24),
-       SwapSequence([MonthNum, F('/'), r'\d', F('/'), Hour24],
-                    [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
-    If(Sequence(MonthNum, F('-'), r'\d', F('-'), Hour24),
-       SwapSequence([MonthNum, F('-'), r'\d', F('-'), Hour24],
-                    [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
-    If(Sequence(MonthNum, F('/'), r'\d', F('/'), MonthNum),
-       SwapSequence([MonthNum, F('/'), r'\d', F('/'), MonthNum],
-                    [MonthNum, F('/'), DayOfMonth, F('/'), Year2])),
-    If(Sequence(MonthNum, F('-'), r'\d', F('-'), MonthNum),
-       SwapSequence([MonthNum, F('-'), r'\d', F('-'), MonthNum],
-                    [MonthNum, F('-'), DayOfMonth, F('-'), Year2])),
-    If(Sequence(MonthNum, F(':'), r'\d', F(':'), r'\d'),
-       SwapSequence([MonthNum, F(':'), r'\d', F(':'), r'\d'],
-                    [Hour12, F(':'), Minute, F(':'), Second])),
-    If(Sequence(Hour24, F(':'), r'\d', F(':'), r'\d'),
-       SwapSequence([Hour24, F(':'), r'\d', F(':'), r'\d'],
-                    [Hour24, F(':'), Minute, F(':'), Second])),
-    If(Sequence(MonthNum, F(':'), r'\d', r'\D'),
-       SwapSequence([MonthNum, F(':'), '.'], [Hour12, F(':'), Minute])),
-    If(Sequence(Hour24, F(':'), r'\d', r'\D'),
-       SwapSequence([Hour24, F(':'), r'\d'], [Hour24, F(':'), Minute])),
-    If(Sequence(MonthNum, F(':'), r'\d'),
-       SwapSequence([MonthNum, F(':'), '.'], [Hour24, F(':'), Minute])),
-    If(And(
-        Sequence(Hour12, F(':'), Minute),
-        Contains(Hour24)),
-       Swap(Hour24, DayOfMonth)),
-    If(And(
-        Sequence(Hour12, F(':'), Minute),
-        Duplicate(Hour12)),
-       SwapDuplicateWhereSequenceNot(Hour12, MonthNum, (Hour12, F(':')))),
-    If(And(
-        Sequence(Hour24, F(':'), Minute),
-        Duplicate(Hour24)),
-       SwapDuplicateWhereSequenceNot(Hour24, DayOfMonth, [Hour24, F(':')])),
+    If(Sequence(Year4, Year2), SwapSequence([Year4, Year2], [Year4, MonthNum])),
+    If(
+        Sequence(MonthNum, F("/"), r"\d", F("/"), Year4),
+        SwapSequence(
+            [MonthNum, F("/"), r"\d", F("/"), Year4],
+            [MonthNum, F("/"), DayOfMonth, F("/"), Year4],
+        ),
+    ),
+    If(
+        Sequence(MonthNum, F("/"), r"\d", F("/"), Hour24),
+        SwapSequence(
+            [MonthNum, F("/"), r"\d", F("/"), Hour24],
+            [MonthNum, F("/"), DayOfMonth, F("/"), Year2],
+        ),
+    ),
+    If(
+        Sequence(MonthNum, F("-"), r"\d", F("-"), Hour24),
+        SwapSequence(
+            [MonthNum, F("-"), r"\d", F("-"), Hour24],
+            [MonthNum, F("-"), DayOfMonth, F("-"), Year2],
+        ),
+    ),
+    If(
+        Sequence(MonthNum, F("/"), r"\d", F("/"), MonthNum),
+        SwapSequence(
+            [MonthNum, F("/"), r"\d", F("/"), MonthNum],
+            [MonthNum, F("/"), DayOfMonth, F("/"), Year2],
+        ),
+    ),
+    If(
+        Sequence(MonthNum, F("-"), r"\d", F("-"), MonthNum),
+        SwapSequence(
+            [MonthNum, F("-"), r"\d", F("-"), MonthNum],
+            [MonthNum, F("-"), DayOfMonth, F("-"), Year2],
+        ),
+    ),
+    If(
+        Sequence(MonthNum, F(":"), r"\d", F(":"), r"\d"),
+        SwapSequence(
+            [MonthNum, F(":"), r"\d", F(":"), r"\d"],
+            [Hour12, F(":"), Minute, F(":"), Second],
+        ),
+    ),
+    If(
+        Sequence(Hour24, F(":"), r"\d", F(":"), r"\d"),
+        SwapSequence(
+            [Hour24, F(":"), r"\d", F(":"), r"\d"],
+            [Hour24, F(":"), Minute, F(":"), Second],
+        ),
+    ),
+    If(
+        Sequence(MonthNum, F(":"), r"\d", r"\D"),
+        SwapSequence([MonthNum, F(":"), "."], [Hour12, F(":"), Minute]),
+    ),
+    If(
+        Sequence(Hour24, F(":"), r"\d", r"\D"),
+        SwapSequence([Hour24, F(":"), r"\d"], [Hour24, F(":"), Minute]),
+    ),
+    If(
+        Sequence(MonthNum, F(":"), r"\d"),
+        SwapSequence([MonthNum, F(":"), "."], [Hour24, F(":"), Minute]),
+    ),
+    If(
+        And(Sequence(Hour12, F(":"), Minute), Contains(Hour24)),
+        Swap(Hour24, DayOfMonth),
+    ),
+    If(
+        And(Sequence(Hour12, F(":"), Minute), Duplicate(Hour12)),
+        SwapDuplicateWhereSequenceNot(Hour12, MonthNum, (Hour12, F(":"))),
+    ),
+    If(
+        And(Sequence(Hour24, F(":"), Minute), Duplicate(Hour24)),
+        SwapDuplicateWhereSequenceNot(Hour24, DayOfMonth, [Hour24, F(":")]),
+    ),
     If(Contains(MonthNum, MonthTextLong), Swap(MonthNum, DayOfMonth)),
     If(Contains(MonthNum, MonthTextShort), Swap(MonthNum, DayOfMonth)),
-    If(Sequence(MonthNum, '.', Hour12),
-       SwapSequence([MonthNum, '.', Hour12], [MonthNum, KeepOriginal, DayOfMonth])),
-    If(Sequence(MonthNum, '.', Hour24),
-       SwapSequence([MonthNum, '.', Hour24], [MonthNum, KeepOriginal, DayOfMonth])),
-    If(Sequence(Hour12, '.', MonthNum),
-       SwapSequence([Hour12, '.', MonthNum], [DayOfMonth, KeepOriginal, MonthNum])),
-    If(Sequence(Hour24, '.', MonthNum),
-       SwapSequence([Hour24, '.', MonthNum], [DayOfMonth, KeepOriginal, MonthNum])),
+    If(
+        Sequence(MonthNum, ".", Hour12),
+        SwapSequence([MonthNum, ".", Hour12], [MonthNum, KeepOriginal, DayOfMonth]),
+    ),
+    If(
+        Sequence(MonthNum, ".", Hour24),
+        SwapSequence([MonthNum, ".", Hour24], [MonthNum, KeepOriginal, DayOfMonth]),
+    ),
+    If(
+        Sequence(Hour12, ".", MonthNum),
+        SwapSequence([Hour12, ".", MonthNum], [DayOfMonth, KeepOriginal, MonthNum]),
+    ),
+    If(
+        Sequence(Hour24, ".", MonthNum),
+        SwapSequence([Hour24, ".", MonthNum], [DayOfMonth, KeepOriginal, MonthNum]),
+    ),
     If(Duplicate(MonthNum), Swap(MonthNum, DayOfMonth)),
-    If(Sequence(F('+'), Year4), SwapSequence([F('+'), Year4], [UTCOffset, None])),
-    If(Sequence(Second, F('-'), Year4),
-       SwapSequence([Second, F('-'), Year4], [Second, UTCOffset, None])),
-    If(Sequence(Minute, F('-'), Year4),
-       SwapSequence([Minute, F('-'), Year4], [Minute, UTCOffset, None])),
-    If(Sequence(Hour24, '.', r'\D'),
-       SwapSequence([Hour24, '.', r'\D'], [DayOfMonth, KeepOriginal, KeepOriginal])),
-    If(Sequence(DayOfMonth, '.', MonthNum, '.', DayOfMonth),
-       SwapSequence([DayOfMonth, '.', MonthNum, '.', DayOfMonth],
-                    [DayOfMonth, KeepOriginal, MonthNum, KeepOriginal, Year2])),
-    If(And(
-        Duplicate(Minute),
-        Contains(Hour24)),
-       SwapDuplicateWhereSequenceNot(Minute, Second, [Minute])),
-
-    If(And(
-            Duplicate(DayOfMonth),
-            Contains(MonthNum)),
-            Swap(MonthNum, Year2)),
+    If(Sequence(F("+"), Year4), SwapSequence([F("+"), Year4], [UTCOffset, None])),
+    If(
+        Sequence(Second, F("-"), Year4),
+        SwapSequence([Second, F("-"), Year4], [Second, UTCOffset, None]),
+    ),
+    If(
+        Sequence(Minute, F("-"), Year4),
+        SwapSequence([Minute, F("-"), Year4], [Minute, UTCOffset, None]),
+    ),
+    If(
+        Sequence(Hour24, ".", r"\D"),
+        SwapSequence([Hour24, ".", r"\D"], [DayOfMonth, KeepOriginal, KeepOriginal]),
+    ),
+    If(
+        Sequence(DayOfMonth, ".", MonthNum, ".", DayOfMonth),
+        SwapSequence(
+            [DayOfMonth, ".", MonthNum, ".", DayOfMonth],
+            [DayOfMonth, KeepOriginal, MonthNum, KeepOriginal, Year2],
+        ),
+    ),
+    If(
+        And(Duplicate(Minute), Contains(Hour24)),
+        SwapDuplicateWhereSequenceNot(Minute, Second, [Minute]),
+    ),
+    If(And(Duplicate(DayOfMonth), Contains(MonthNum)), Swap(MonthNum, Year2)),
     If(
         Duplicate(DayOfMonth),
-        SwapDuplicateWhereSequenceNot(DayOfMonth, MonthNum, [DayOfMonth])),
-
+        SwapDuplicateWhereSequenceNot(DayOfMonth, MonthNum, [DayOfMonth]),
+    ),
 ]
 
 
@@ -130,7 +200,7 @@ def infer(examples, alt_rules=None):
     else:
         date_classes = _apply_rewrites(date_classes, RULES)
 
-    date_string = ''
+    date_string = ""
     for date_class in date_classes:
         date_string += date_class.directive
 
@@ -162,7 +232,9 @@ def _mode(elems):
 
     most_common = c.most_common(1)
     most_common.sort()
-    return most_common[0][0]  # most_common[0] is a tuple of key and count; no need for the count
+    return most_common[0][
+        0
+    ]  # most_common[0] is a tuple of key and count; no need for the count
 
 
 def _most_restrictive(date_elems):
@@ -176,7 +248,7 @@ def _most_restrictive(date_elems):
     if most_index < len(DATE_ELEMENTS):
         return DATE_ELEMENTS[most_index]
 
-    raise KeyError('No least restrictive date element found')
+    raise KeyError("No least restrictive date element found")
 
 
 def _percent_match(date_classes, tokens):
@@ -208,8 +280,9 @@ def _tag_most_likely(examples):
     # have a length that does not equal the mode of lengths within tokenized_examples
     token_lengths = [len(e) for e in tokenized_examples]
     token_lengths_mode = _mode(token_lengths)
-    tokenized_examples = [example for example in tokenized_examples if len(
-        example) == token_lengths_mode]
+    tokenized_examples = [
+        example for example in tokenized_examples if len(example) == token_lengths_mode
+    ]
 
     # Now, we iterate through the tokens, assigning date elements based on their likelihood.
     # In cases where the assignments are unlikely for all date elements, assign filler.
@@ -249,7 +322,7 @@ def _tokenize_by_character_class(s):
         lambda x: x.isdigit(),
         lambda x: x.isalpha(),
         lambda x: x in string.punctuation,
-        lambda x: x.isspace()
+        lambda x: x.isspace(),
     ]
 
     result = []
@@ -259,13 +332,15 @@ def _tokenize_by_character_class(s):
         for part_of_class in character_classes:
             if part_of_class(rest[0]):
                 progress = True
-                token = ''
+                token = ""
                 for take_away in itertools.takewhile(part_of_class, rest[:]):
                     token += take_away
                     rest.pop(0)
                 result.append(token)
                 break
-        if not progress:  # none of the character classes matched; unprintable character?
+        if (
+            not progress
+        ):  # none of the character classes matched; unprintable character?
             result.append(rest[0])
             rest = rest[1:]
 

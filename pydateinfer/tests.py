@@ -6,12 +6,28 @@ from os.path import dirname, join
 
 import dateinfer.ruleproc as ruleproc
 import yaml
-from dateinfer.date_elements import (DayOfMonth, Filler, Hour12, Hour24,
-                                     Minute, MonthNum, MonthTextShort, Second,
-                                     Timezone, WeekdayShort, Year2, Year4)
-from dateinfer.infer import (_mode, _most_restrictive, _percent_match,
-                             _tag_most_likely, _tokenize_by_character_class,
-                             infer)
+from dateinfer.date_elements import (
+    DayOfMonth,
+    Filler,
+    Hour12,
+    Hour24,
+    Minute,
+    MonthNum,
+    MonthTextShort,
+    Second,
+    Timezone,
+    WeekdayShort,
+    Year2,
+    Year4,
+)
+from dateinfer.infer import (
+    _mode,
+    _most_restrictive,
+    _percent_match,
+    _tag_most_likely,
+    _tokenize_by_character_class,
+    infer,
+)
 
 LOCALE_LOCK = threading.Lock()
 
@@ -33,7 +49,7 @@ def load_tests(loader, standard_tests, ignored):
     suite = unittest.TestSuite()
     suite.addTests(standard_tests)
 
-    with open(join(dirname(__file__), 'examples.yaml'), 'r') as f:
+    with open(join(dirname(__file__), "examples.yaml"), "r") as f:
         examples = yaml.safe_load_all(f)
         for example in examples:
             suite.addTest(test_case_for_example(example))
@@ -50,21 +66,25 @@ def test_case_for_example(test_data):
     class TestExampleDate(unittest.TestCase):
         def testFormat(self):
             # verify initial conditions
-            self.assertTrue(hasattr(self, 'test_data'), 'testdata field not set on test object')
+            self.assertTrue(
+                hasattr(self, "test_data"), "testdata field not set on test object"
+            )
 
-            expected = self.test_data['format']
-            testcase_locale = self.test_data.get('locale', 'en_US.UTF-8')
+            expected = self.test_data["format"]
+            testcase_locale = self.test_data.get("locale", "en_US.UTF-8")
 
             with setlocale(testcase_locale):
-                actual = infer(self.test_data['examples'])
+                actual = infer(self.test_data["examples"])
 
-            error_fmt = '{0}: Inferred `{1}`!=`{2}`'
+            error_fmt = "{0}: Inferred `{1}`!=`{2}`"
 
-            self.assertEqual(expected,
-                             actual,
-                             error_fmt.format(self.test_data['name'], actual, expected))
+            self.assertEqual(
+                expected,
+                actual,
+                error_fmt.format(self.test_data["name"], actual, expected),
+            )
 
-    test_case = TestExampleDate(methodName='testFormat')
+    test_case = TestExampleDate(methodName="testFormat")
     test_case.test_data = test_data
     return test_case
 
@@ -76,14 +96,16 @@ class TestAmbiguousDateCases(unittest.TestCase):
     """
 
     def testAmbg1(self):
-        self.assertIn(infer(['1/1/2012']), ['%m/%d/%Y', '%d/%m/%Y'])
+        self.assertIn(infer(["1/1/2012"]), ["%m/%d/%Y", "%d/%m/%Y"])
 
     def testAmbg2(self):
         # Note: as described in Issue #5 (https://github.com/jeffreystarr/dateinfer/issues/5), the
         # result should be %d/%m/%Y as the more likely choice. However, at this point, we will
         # allow %m/%d/%Y.
-        self.assertIn(infer(['04/12/2012', '05/12/2012', '06/12/2012', '07/12/2012']),
-                      ['%d/%m/%Y', '%m/%d/%Y'])
+        self.assertIn(
+            infer(["04/12/2012", "05/12/2012", "06/12/2012", "07/12/2012"]),
+            ["%d/%m/%Y", "%m/%d/%Y"],
+        )
 
 
 class TestMode(unittest.TestCase):
@@ -104,7 +126,7 @@ class TestPercentMatch(unittest.TestCase):
     def testPercentMatch(self):
         t = _percent_match
         patterns = (DayOfMonth, MonthNum, Filler)
-        examples = ['1', '2', '24', 'b', 'c']
+        examples = ["1", "2", "24", "b", "c"]
 
         percentages = t(patterns, examples)
 
@@ -115,17 +137,36 @@ class TestPercentMatch(unittest.TestCase):
 
 class TestRuleElements(unittest.TestCase):
     def testFind(self):
-        elem_list = [Filler(' '), DayOfMonth(), Filler('/'), MonthNum(), Hour24(), Year4()]
+        elem_list = [
+            Filler(" "),
+            DayOfMonth(),
+            Filler("/"),
+            MonthNum(),
+            Hour24(),
+            Year4(),
+        ]
         t = ruleproc.Sequence.find
 
-        self.assertEqual(0, t([Filler(' ')], elem_list))
+        self.assertEqual(0, t([Filler(" ")], elem_list))
         self.assertEqual(3, t([MonthNum], elem_list))
-        self.assertEqual(2, t([Filler('/'), MonthNum()], elem_list))
+        self.assertEqual(2, t([Filler("/"), MonthNum()], elem_list))
         self.assertEqual(4, t([Hour24, Year4()], elem_list))
 
-        elem_list = [WeekdayShort, MonthTextShort, Filler(' '), Hour24, Filler(':'), Minute, Filler(':'), Second,
-                     Filler(' '), Timezone, Filler(' '), Year4]
-        self.assertEqual(3, t([Hour24, Filler(':')], elem_list))
+        elem_list = [
+            WeekdayShort,
+            MonthTextShort,
+            Filler(" "),
+            Hour24,
+            Filler(":"),
+            Minute,
+            Filler(":"),
+            Second,
+            Filler(" "),
+            Timezone,
+            Filler(" "),
+            Year4,
+        ]
+        self.assertEqual(3, t([Hour24, Filler(":")], elem_list))
 
     def testMatch(self):
         t = ruleproc.Sequence.match
@@ -140,7 +181,14 @@ class TestRuleElements(unittest.TestCase):
         self.assertFalse(t(Hour12(), Hour24()))
 
     def testNext(self):
-        elem_list = [Filler(' '), DayOfMonth(), Filler('/'), MonthNum(), Hour24(), Year4()]
+        elem_list = [
+            Filler(" "),
+            DayOfMonth(),
+            Filler("/"),
+            MonthNum(),
+            Hour24(),
+            Year4(),
+        ]
 
         next1 = ruleproc.Next(DayOfMonth, MonthNum)
         self.assertTrue(next1.is_true(elem_list))
@@ -154,11 +202,11 @@ class TestRuleElements(unittest.TestCase):
 
 class TestTagMostLikely(unittest.TestCase):
     def testTagMostLikely(self):
-        examples = ['8/12/2004', '8/14/2004', '8/16/2004', '8/25/2004']
+        examples = ["8/12/2004", "8/14/2004", "8/16/2004", "8/25/2004"]
         t = _tag_most_likely
 
         actual = t(examples)
-        expected = [MonthNum(), Filler('/'), DayOfMonth(), Filler('/'), Year4()]
+        expected = [MonthNum(), Filler("/"), DayOfMonth(), Filler("/"), Year4()]
 
         self.assertListEqual(actual, expected)
 
@@ -167,11 +215,29 @@ class TestTokenizeByCharacterClass(unittest.TestCase):
     def testTokenize(self):
         t = _tokenize_by_character_class
 
-        self.assertListEqual([], t(''))
-        self.assertListEqual(['2013', '-', '08', '-', '14'], t('2013-08-14'))
+        self.assertListEqual([], t(""))
+        self.assertListEqual(["2013", "-", "08", "-", "14"], t("2013-08-14"))
         self.assertListEqual(
-            ['Sat', ' ', 'Jan', ' ', '11', ' ', '19', ':', '54', ':', '52', ' ', 'MST', ' ',
-             '2014'],
-            t('Sat Jan 11 19:54:52 MST 2014'))
-        self.assertListEqual(['4', '/', '30', '/', '1998', ' ', '4', ':',
-                              '52', ' ', 'am'], t('4/30/1998 4:52 am'))
+            [
+                "Sat",
+                " ",
+                "Jan",
+                " ",
+                "11",
+                " ",
+                "19",
+                ":",
+                "54",
+                ":",
+                "52",
+                " ",
+                "MST",
+                " ",
+                "2014",
+            ],
+            t("Sat Jan 11 19:54:52 MST 2014"),
+        )
+        self.assertListEqual(
+            ["4", "/", "30", "/", "1998", " ", "4", ":", "52", " ", "am"],
+            t("4/30/1998 4:52 am"),
+        )

@@ -3,7 +3,7 @@ import re
 
 import pytz
 
-__author__ = 'jeffrey.starr@ztoztechnologies.com'
+__author__ = "jeffrey.starr@ztoztechnologies.com"
 
 
 class DateElement:
@@ -13,6 +13,7 @@ class DateElement:
     Inheriting classes should implement a string 'directive' field that provides the relevant
     directive for the datetime.strftime/strptime method.
     """
+
     directive = None
 
     def __eq__(self, other):
@@ -37,16 +38,17 @@ class DateElement:
         """
         Return true if the written representation of the element are digits
         """
-        raise NotImplementedError('is_numerical')
+        raise NotImplementedError("is_numerical")
 
 
 class AMPM(DateElement):
     """AM | PM"""
-    directive = '%p'
+
+    directive = "%p"
 
     @staticmethod
     def is_match(token):
-        return token in ('AM', 'PM', 'am', 'pm')
+        return token in ("AM", "PM", "am", "pm")
 
     @staticmethod
     def is_numerical():
@@ -56,7 +58,7 @@ class AMPM(DateElement):
 class DayOfMonth(DateElement):
     """1 .. 31"""
 
-    directive = '%d'
+    directive = "%d"
 
     @staticmethod
     def is_match(token):
@@ -78,7 +80,7 @@ class Filler(DateElement):
     """
 
     def __init__(self, filler):
-        self.directive = filler.replace('%', '%%')  # escape %
+        self.directive = filler.replace("%", "%%")  # escape %
 
     @staticmethod
     def is_match(_):
@@ -91,7 +93,8 @@ class Filler(DateElement):
 
 class Hour12(DateElement):
     """1 .. 12 (zero padding accepted)"""
-    directive = '%I'
+
+    directive = "%I"
 
     @staticmethod
     def is_match(token):
@@ -108,7 +111,8 @@ class Hour12(DateElement):
 
 class Hour24(DateElement):
     """00 .. 23"""
-    directive = '%H'
+
+    directive = "%H"
 
     @staticmethod
     def is_match(token):
@@ -125,7 +129,8 @@ class Hour24(DateElement):
 
 class Minute(DateElement):
     """00 .. 59"""
-    directive = '%M'
+
+    directive = "%M"
 
     @staticmethod
     def is_match(token):
@@ -143,7 +148,7 @@ class Minute(DateElement):
 class MonthNum(DateElement):
     """1 .. 12"""
 
-    directive = '%m'
+    directive = "%m"
 
     @staticmethod
     def is_match(token):
@@ -163,7 +168,8 @@ class MonthTextLong(DateElement):
 
     Uses calendar.month_name to provide localization
     """
-    directive = '%B'
+
+    directive = "%B"
 
     @staticmethod
     def is_match(token):
@@ -179,7 +185,8 @@ class MonthTextShort(DateElement):
 
     Uses calendar.month_abbr to provide localization
     """
-    directive = '%b'
+
+    directive = "%b"
 
     @staticmethod
     def is_match(token):
@@ -195,7 +202,8 @@ class Second(DateElement):
 
     Normally, seconds range from 0 to 59. In the case of a leap second, the second value may be 60.
     """
-    directive = '%S'
+
+    directive = "%S"
 
     @staticmethod
     def is_match(token):
@@ -212,7 +220,8 @@ class Second(DateElement):
 
 class Timezone(DateElement):
     """IANA common timezones (e.g. UTC, EST, US/Eastern, ...)"""
-    directive = '%Z'
+
+    directive = "%Z"
 
     @staticmethod
     def is_match(token):
@@ -225,7 +234,8 @@ class Timezone(DateElement):
 
 class UTCOffset(DateElement):
     """UTC offset +0400 -1130"""
-    directive = '%z'
+
+    directive = "%z"
 
     @staticmethod
     def is_match(token):
@@ -234,7 +244,7 @@ class UTCOffset(DateElement):
         # but python apparently only uses the +/-hhmm format
         # A rule will catch the preceding + and - and combine the two entries since punctuation and
         # numbers are separated by the tokenizer.
-        offset_re = r'^\d\d\d\d$'
+        offset_re = r"^\d\d\d\d$"
         return re.match(offset_re, token)
 
     @staticmethod
@@ -247,7 +257,8 @@ class WeekdayLong(DateElement):
 
     Uses calendar.day_name to provide localization
     """
-    directive = '%A'
+
+    directive = "%A"
 
     @staticmethod
     def is_match(token):
@@ -259,7 +270,8 @@ class WeekdayShort(DateElement):
 
     Uses calendar.day_abbr to provide localization
     """
-    directive = '%a'
+
+    directive = "%a"
 
     @staticmethod
     def is_match(token):
@@ -273,7 +285,7 @@ class WeekdayShort(DateElement):
 class Year2(DateElement):
     """00 .. 99"""
 
-    directive = '%y'
+    directive = "%y"
 
     @staticmethod
     def is_match(token):
@@ -293,7 +305,7 @@ class Year2(DateElement):
 class Year4(DateElement):
     """0000 .. 9999"""
 
-    directive = '%Y'
+    directive = "%Y"
 
     @staticmethod
     def is_match(token):
