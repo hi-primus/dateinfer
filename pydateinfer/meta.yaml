@@ -1,0 +1,44 @@
+{% set name = "py_dateinfer" %}
+{% set version = "0.4.4" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "4623953791efeee33c1a21016f985bd3a3ca5807deaaefcb9eca054f7b86c14f"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - pip
+    - python
+    - pytz
+    - wheel
+  run:
+    - python
+    - pytz
+    - wheel
+
+test:
+  imports:
+    - pydateinfer
+  requires:
+    - pytest >=3
+
+about:
+  home: "https://github.com/jeffreystarr/dateinfer"
+  license: "Apache Software"
+  license_family: "APACHE"
+  license_file: ""
+  summary: "Infers date format from examples, by using a series of pattern matching and rewriting rules to compute a 'best guess' datetime.strptime format string give a list of example date strings."
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here
