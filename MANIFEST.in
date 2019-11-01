@@ -1,7 +1,7 @@
 include *.in
-include *.md
 include *.txt
 include LICENSE
-include HISTORY
-recursive-include dateinfer *.yaml
+include Makefile
 recursive-include docs *.md
+recursive-include pydateinfer *.yaml
+recursive-include pydateinfer *.py

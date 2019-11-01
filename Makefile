@@ -80,7 +80,7 @@ release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	check-manifest --create
+	#check-manifest --create
 	python setup.py sdist
 	python setup.py bdist_wheel
 	ls -l dist
