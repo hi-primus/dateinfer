@@ -24,6 +24,7 @@ requirements = ["wheel", "pytz"]
 test_requirements = ["pytest>=3"]
 
 setup(
+    name="hi-dateinfer",
     author="Jeffrey Starr",
     author_email="will@pedalwrencher.com",
     python_requires="!=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
@@ -42,13 +43,12 @@ setup(
     install_requires=requirements,
     license="Apache Software License 2.0",
     include_package_data=True,
-    keywords="pydateinfer",
-    name="py_dateinfer",
-    packages=find_packages(include=["pydateinfer", "pydateinfer.*"]),
+    keywords="dateinfer",
+    packages=find_packages(include=["hidateinfer", "hidateinfer.*"]),
     setup_requires=[],
     test_suite="tests",
     tests_require=test_requirements,
-    url="https://github.com/jeffreystarr/dateinfer",
-    version=get_version("pydateinfer/__init__.py"),
+    url="https://github.com/hi-primus/hi-dateinfer",
+    version=get_version("hidateinfer/__init__.py"),
     zip_safe=False,
 )

@@ -1,10 +1,10 @@
-pydateinfer
+hi-dateinfer
 ===========
 
 Python library to infer date format from examples.  This is an actively
  maintained fork of the original [dateinfer](https://github.com/jeffreystarr/dateinfer)
  library by Jeffery Starr.  It maintains python 2/3 compatibility and
- will be released as pydateinfer.  Pull requests and issues welcome.
+ will be released as hi-dateinfer.  Pull requests and issues welcome.
 
 Table of Contents
 -----------------
@@ -27,9 +27,15 @@ the file.
 ---------------------------------------
 
 ````sh
-git clone https://github.com/nedap/dateinfer.git
+git clone https://github.com/hi-primus/hi-dateinfer.git
 cd dateinfer
 pip install .
+````
+
+or
+
+````sh
+pip install hi-dateinfer
 ````
 
 <a name="usage"></a>Usage

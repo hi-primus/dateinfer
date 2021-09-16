@@ -4,9 +4,9 @@ import unittest
 from contextlib import contextmanager
 from os.path import dirname, join
 
-import pydateinfer.ruleproc as ruleproc
+import hidateinfer.ruleproc as ruleproc
 import yaml
-from pydateinfer.date_elements import (
+from hidateinfer.date_elements import (
     DayOfMonth,
     Filler,
     Hour12,
@@ -20,7 +20,7 @@ from pydateinfer.date_elements import (
     Year2,
     Year4,
 )
-from pydateinfer.infer import (
+from hidateinfer.infer import (
     _mode,
     _most_restrictive,
     _percent_match,

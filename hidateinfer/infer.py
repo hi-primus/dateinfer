@@ -7,7 +7,7 @@ import collections
 import itertools
 import string
 
-from pydateinfer.date_elements import (
+from hidateinfer.date_elements import (
     AMPM,
     DayOfMonth,
     Filler,
@@ -25,7 +25,7 @@ from pydateinfer.date_elements import (
     Year2,
     Year4,
 )
-from pydateinfer.ruleproc import (
+from hidateinfer.ruleproc import (
     And,
     Contains,
     Duplicate,
@@ -188,6 +188,10 @@ RULES = [
 ]
 
 
+_alt_directives = {'%z': '%Y',
+                   '%Y': '%z'}
+
+
 def infer(examples, alt_rules=None):
     """
     Returns a datetime.strptime-compliant format string for parsing the *most likely* date format
@@ -201,8 +205,16 @@ def infer(examples, alt_rules=None):
         date_classes = _apply_rewrites(date_classes, RULES)
 
     date_string = ""
+    directives = []
     for date_class in date_classes:
-        date_string += date_class.directive
+        directive = date_class.directive
+        if '%' in directive:
+            if directive in directives:
+                directive = _alt_directives.get(directive, directive)
+            if directive in directives:
+                continue
+        directives.append(directive)
+        date_string += directive
 
     return date_string
 
