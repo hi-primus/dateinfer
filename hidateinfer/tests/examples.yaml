@@ -173,3 +173,10 @@ format: "%A %d %B %Y %I:%M %p"
 examples:
   - Tuesday 5 March 2019 05:09 PM
 ...
+---
+name: UTC with  millisecond
+format: "%Y-%m-%d %H:%M:%S.%f"
+examples:
+  - 2014-01-22 23:21:05.000055
+  - 2015-02-23 16:05:31.020023
+...
