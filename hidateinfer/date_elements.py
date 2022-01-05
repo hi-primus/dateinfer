@@ -134,6 +134,8 @@ class Minute(DateElement):
 
     @staticmethod
     def is_match(token):
+        if len(token) > 3:
+            return False
         try:
             minute = int(token)
             return 0 <= minute <= 59
@@ -207,6 +209,8 @@ class Second(DateElement):
 
     @staticmethod
     def is_match(token):
+        if len(token) > 3:
+            return False
         try:
             second = int(token)
             return 0 <= second <= 60
@@ -216,6 +220,25 @@ class Second(DateElement):
     @staticmethod
     def is_numerical():
         return True
+
+
+class Millisecond(DateElement):
+    """000000 .. 999999
+
+    Normally, millisecond range from 0 to 999999.
+    """
+
+    directive = "%f"
+
+    @staticmethod
+    def is_match(token):
+        if len(token) != 6:
+            return False
+        try:
+            millisecond = int(token)
+            return 0 <= millisecond <= 999999
+        except ValueError:
+            return False
 
 
 class Timezone(DateElement):
