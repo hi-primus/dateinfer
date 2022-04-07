@@ -42,7 +42,7 @@ pip install hi-dateinfer
 -------------------------
 
 ````Python
->>> import dateinfer
+>>> import hidateinfer as dateinfer
 >>> dateinfer.infer(['Mon Jan 13 09:52:52 MST 2014', 'Tue Jan 21 15:30:00 EST 2014'])
 '%a %b %d %H:%M:%S %Z %Y'
 >>>
